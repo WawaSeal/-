@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Real-time translator</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<title>Real-time Japanese speech recognition</title>
+<script src="https://pypi.python.org/pypi/SpeechRecognition/3.8.1/SpeechRecognition-3.8.1.min.js"></script>
 <script>
 $(function() {
-  // 音声認識APIを初期化します。
-  var r = new webkitSpeechRecognition();
+  // 音声認識を初期化します。
+  var r = new SpeechRecognition();
 
   // 音声認識イベントをハンドルします。
   r.onresult = function(event) {
     // 認識結果を取得します。
     var text = event.results[0].item(0).transcript;
 
-    // テキストを翻訳します。
-    var translator = new googleTranslate();
-    var translation = translator.translate(text, 'en');
-
-    // 翻訳されたテキストを表示します。
-    $("#output").text(translation);
+    // テキストを表示します。
+    $("#output").text(text);
   };
 
   // 録音ボタンをクリックしたときに音声認識を開始します。
@@ -30,18 +26,12 @@ $(function() {
   $("#stop").click(function() {
     r.stop();
   });
-
-  // 字幕の色を変更します。
-  $("#color").change(function() {
-    $("#output").css("color", $("#color").val());
-  });
 });
 </script>
-</head>
+<head>
 <body>
 <input type="button" id="record" value="Record">
 <input type="button" id="stop" value="Stop">
-<input type="color" id="color" value="black">
 <div id="output"></div>
-</body>
+<body>
 </html>
