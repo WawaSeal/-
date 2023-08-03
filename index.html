@@ -20,11 +20,13 @@ $(function() {
   // 録音ボタンをクリックしたときに音声認識を開始します。
   $("#record").click(function() {
     r.start();
+    $("#record").text("Recording");
   });
 
   // 停止ボタンをクリックしたときに音声認識を停止します。
   $("#stop").click(function() {
     r.stop();
+    $("#record").text("Record");
   });
 });
 </script>
