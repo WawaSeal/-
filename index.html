@@ -2,14 +2,11 @@
 <html>
 <head>
 <title>Real-time Japanese speech recognition</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://pypi.python.org/pypi/SpeechRecognition/3.8.1/SpeechRecognition-3.8.1.min.js"></script>
 <script>
 $(function() {
   // 音声認識を初期化します。
-  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
   var r = new SpeechRecognition();
-  r.lang = "ja-JP";
 
   // 音声認識イベントをハンドルします。
   r.onresult = function(event) {
@@ -23,20 +20,27 @@ $(function() {
   // 録音ボタンをクリックしたときに音声認識を開始します。
   $("#record").click(function() {
     r.start();
-    $("#record").val("録音中");
+    $("#record").text("Recording");
   });
 
   // 停止ボタンをクリックしたときに音声認識を停止します。
   $("#stop").click(function() {
     r.stop();
-    $("#record").val("聞き取り開始");
+    $("#record").text("Record");
+  });
+
+  // Pythonコードを実行します。
+  $.getScript("python.py", function() {
+    // 音声認識を開始します。
+    r.start();
   });
 });
 </script>
-</head>
+<head>
 <body>
-<input type="button" id="record" value="聞き取り開始">
-<input type="button" id="stop" value="聞き取り停止">
+<input type="button" id="record" value="Record">
+<input type="button" id="stop" value="Stop">
 <div id="output"></div>
-</body>
+<body>
 </html>
+
