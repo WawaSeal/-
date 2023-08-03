@@ -1,46 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Real-time Japanese speech recognition</title>
-<script src="https://pypi.python.org/pypi/SpeechRecognition/3.8.1/SpeechRecognition-3.8.1.min.js"></script>
+<title>Google Translate Demo</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://apis.google.com/js/client.js"></script>
 <script>
-$(function() {
-  // 音声認識を初期化します。
-  var r = new SpeechRecognition();
+// Google Translate APIを初期化する
+function initGoogleTranslate() {
+  // 翻訳言語を設定します。
+  var targetLanguage = "en";
 
-  // 音声認識イベントをハンドルします。
-  r.onresult = function(event) {
-    // 認識結果を取得します。
-    var text = event.results[0].item(0).transcript;
+  // Google Translate APIを作成します。
+  var googleTranslate = new google.translate.Translate();
 
-    // テキストを表示します。
-    $("#output").text(text);
-  };
+  // テキストを翻訳します。
+  function translate(text) {
+    // 翻訳結果を取得します。
+    var translation = googleTranslate.translate(text, targetLanguage);
 
-  // 録音ボタンをクリックしたときに音声認識を開始します。
-  $("#record").click(function() {
-    r.start();
-    $("#record").text("Recording");
+    // 翻訳結果を表示します。
+    $("#translation").html(translation);
+  }
+
+  // テキスト入力フィールドにテキストが入力されたら、翻訳します。
+  $("#input").on("input", function() {
+    translate($(this).val());
   });
 
-  // 停止ボタンをクリックしたときに音声認識を停止します。
-  $("#stop").click(function() {
-    r.stop();
-    $("#record").text("Record");
+  // 背景色と翻訳結果の英語字幕の色を変更する
+  $("#background").on("click", function() {
+    var color = $(this).val();
+    $("#translation").css("background-color", color);
   });
 
-  // Pythonコードを実行します。
-  $.getScript("python.py", function() {
-    // 音声認識を開始します。
-    r.start();
+  $("#translation-color").on("click", function() {
+    var color = $(this).val();
+    $("#translation").css("color", color);
   });
-});
+}
 </script>
-<head>
+</head>
 <body>
-<input type="button" id="record" value="Record">
-<input type="button" id="stop" value="Stop">
-<div id="output"></div>
-<body>
+<input type="text" id="input">
+<button id="translate">Translate</button>
+<div id="translation"></div>
+<div id="background">
+  <input type="radio" name="background" value="red">Red
+  <input type="radio" name="background" value="blue">Blue
+  <input type="radio" name="background" value="green">Green
+</div>
+<div id="translation-color">
+  <input type="radio" name="translation-color" value="black">Black
+  <input type="radio" name="translation-color" value="white">White
+  <input type="radio" name="translation-color" value="gray">Gray
+</div>
+</body>
 </html>
-
