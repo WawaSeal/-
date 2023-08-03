@@ -20,20 +20,20 @@ $(function() {
   // 録音ボタンをクリックしたときに音声認識を開始します。
   $("#record").click(function() {
     r.start();
-    $("#record").text("Recording");
+    $("#record").val("録音中");
   });
 
   // 停止ボタンをクリックしたときに音声認識を停止します。
   $("#stop").click(function() {
     r.stop();
-    $("#record").text("Record");
+    $("#record").val("Record");
   });
 });
 </script>
 <head>
 <body>
-<input type="button" id="record" value="Record">
-<input type="button" id="stop" value="Stop">
+<input type="button" id="record" value="聞き取り開始">
+<input type="button" id="stop" value="聞き取り停止">
 <div id="output"></div>
 <body>
 </html>
