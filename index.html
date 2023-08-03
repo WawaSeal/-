@@ -1,119 +1,108 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>ほんやくき</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-body {
-  font-family: "Roboto", sans-serif;
-  margin: 0;
-  padding: 0;
-}
+  <head>
+    <title>音声認識と翻訳</title>
+  </head>
+  <body>
+    <h1>音声認識と翻訳</h1>
+    <p id="subtitle"></p>
+    <button id="start-button">音声入力開始</button>
+    <input type="color" id="text-color-picker" value="#ffffff">
+    <input type="color" id="background-color-picker" value="#000000">
+    <script>
+      // 音声認識と翻訳を開始する関数
+      function startSpeechRecognition() {
+        // 音声認識の処理を実装する
+    // 音声認識APIがサポートされているか確認する
+    if (!('webkitSpeechRecognition' in window)) {
+      alert('ご利用のブラウザでは音声認識APIがサポートされていません');
+      return;
+    }
+  
+    // 音声認識オブジェクトを作成する
+    const recognition = new webkitSpeechRecognition();
+  
+    // 認識言語を設定する（英語）
+    recognition.lang = 'en-US';
+  
+    // 連続した結果を取得する（falseに設定すると、1回のみの認識結果を返す）
+    recognition.continuous = true;
+  
+    // 認識中に中断された場合に処理を行う
+    recognition.onend = function() {
+      console.log('音声認識が停止しました');
+    };
+  
+    // 認識された音声データを取得する
+    recognition.onresult = function(event) {
+      // 認識結果を取得する
+      const result = event.results[event.results.length - 1];
+  
+      // 認識されたテキストを取得する
+      const text = result[0].transcript;
+  
+      // 翻訳の処理を実装する
+      
+  // Microsoft Translator APIのエンドポイントURL
+  const url = 'https://api.cognitive.microsofttranslator.com/translate';
 
-.container {
-  width: 100%;
-  height: 100%;
-}
+  // APIキー
+  const apiKey = 'd4badfdb-6aa7-4465-86f4-619fa3dab117';
 
-.subtitle {
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: bold;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 99;
-}
+  // 翻訳する言語のコード（英語）
+  const targetLanguage = 'en';
 
-.transcript {
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: normal;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 98;
-  background-color: #000000;
-  opacity: 0.5;
-}
+  // リクエストヘッダを作成する
+  const headers = {
+    'Content-Type': 'application/json',
+    'Ocp-Apim-Subscription-Key': apiKey,
+  };
 
-.button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 40px;
-  background-color: #0000ff;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: bold;
-}
+  // リクエストボディを作成する
+  const body = JSON.stringify([
+    {
+      text: text,
+    }
 
-.color-picker {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100px;
-  height: 40px;
-}
+  // リクエストを送信する
+  fetch(`${url}?api-version=3.0&to=${targetLanguage}`, {
+    method: 'POST',
+    headers: headers,
+    body: body,
+  })
+    .then(response => response.json())
+    .then(data => {
+      // 翻訳結果を取得する
+      const translatedText = data[0].translations[0].text;
 
-.font-selector {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100px;
-  height: 40px;
-}
-
-.translate {
-  display: auto;
-}
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="subtitle">Automatic Translation</div>
-  <div class="transcript"></div>
-  <div class="button" onclick="translate()">Translate</div>
-  <div class="color-picker"></div>
-  <div class="font-selector"></div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(function() {
-  // マイクから音声を取得する
-  var microphone = new MediaRecorder(navigator.mediaDevices.getUserMedia({
-    "audio": true
-  }));
-
-  // 音声を翻訳する
-  var translator = new GoogleTranslate();
-
-  // 翻訳開始ボタンをクリックしたときに翻訳を開始する
-  $("#translate").on("click", function() {
-    // マイクを録音開始する
-    microphone.start();
-
-    // 音声を翻訳する
-    translator.translate(microphone, function(result) {
-      // 翻訳結果を表示する
-      $("#transcript").text(result);
+      // 翻訳結果を字幕として表示する
+      document.getElementById('subtitle').textContent = translatedText;
+    })
+    .catch(error => {
+      console.error(error);
     });
-  });
+}
 
-  // マイクから音声を取得するたびに色とフォントを変える
-  microphone.on("dataavailable", function() {
-    // 色をランダムに変更する
-    $("#transcript").css("color", Math.random().toString(16).slice(2, 6));
+      
+      // 翻訳結果を字幕として表示する
+      document.getElementById('subtitle').textContent = text;
+    };
+  
+    // 音声認識を開始する
+    recognition.start();
+  }
+      }
 
-    // フォントをランダムに変更する
-    $("#transcript").css("font-family", "sans-serif, " + Math.random().toString(16).slice(2, 6));
-  });
-});
-</script>
-</body>
+      // ボタンがクリックされたときに音声認識と翻訳を開始する
+      document.getElementById("start-button").addEventListener("click", startSpeechRecognition);
+
+      // カラーピッカーで選択された色を使って、字幕のスタイルを変更する
+      document.getElementById("text-color-picker").addEventListener("change", function() {
+        document.getElementById("subtitle").style.color = this.value;
+      });
+      document.getElementById("background-color-picker").addEventListener("change", function() {
+        document.getElementById("subtitle").style.backgroundColor = this.value;
+      });
+    </script>
+  </body>
 </html>
