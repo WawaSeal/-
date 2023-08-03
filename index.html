@@ -5,43 +5,70 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://apis.google.com/js/client.js"></script>
 <script>
+// Google Translate APIのキー
+var googleTranslateKey = "YOUR_API_KEY";
+
+// 音声認識エンジン
+var recognizer;
+
 // Google Translate APIを初期化する
 function initGoogleTranslate() {
   // 翻訳言語を設定します。
   var targetLanguage = "en";
 
-  // Google Translate APIを作成します。
-  var googleTranslate = new google.translate.Translate();
+  // 音声認識エンジンを作成します。
+  recognizer = new SpeechRecognition();
 
-  // 音声を認識します。
-  function recognize() {
-    // 音声認識エンジンを作成します。
-    var recognizer = new SpeechRecognition();
+  // 音声認識エンジンの言語を設定します。
+  recognizer.lang = "ja-JP";
 
-    // 音声認識を開始します。
-    recognizer.start();
-
-    // 音声認識が終了したら、翻訳します。
-    recognizer.onend = function() {
-      var text = recognizer.result.transcript;
-      translate(text);
-    };
-  }
-
-  // テキストを翻訳します。
-  function translate(text) {
-    // 翻訳結果を取得します。
-    var translation = googleTranslate.translate(text, targetLanguage);
-
-    // 翻訳結果を表示します。
-    $("#translation").html(translation);
-  }
+  // 音声認識が終了したら、翻訳します。
+  recognizer.onend = function() {
+    var text = recognizer.result.transcript;
+    translate(text);
+  };
 
   // 音声認識ボタンをクリックしたら、音声を認識します。
   $("#recognize").on("click", recognize);
 }
+
+// 音声を認識する
+function recognize() {
+  // 音声認識を開始します。
+  recognizer.start();
+}
+
+// テキストを翻訳する
+function translate(text) {
+  // Google Translate APIのリクエストURLを作成します。
+  var url = "https://translation.googleapis.com/language/translate/v2";
+  url += "?key=" + googleTranslateKey;
+  url += "&q=" + encodeURI(text);
+  url += "&target=" + targetLanguage;
+
+  // Google Translate APIにリクエストを送信します。
+  $.ajax({
+    url: url,
+    type: "GET",
+    dataType: "json",
+    success: function(data) {
+      // 翻訳結果を取得します。
+      var translation = data.data.translations[0].translatedText;
+
+      // 翻訳結果を表示します。
+      $("#translation").html(translation);
+    },
+    error: function(error) {
+      // エラーが発生した場合は、メッセージを表示します。
+      $("#translation").html("Error: " + error.message);
+    }
+  });
+}
+
+// Google Translate APIを初期化します。
+initGoogleTranslate();
 </script>
-<head>
+</head>
 <body>
 <input type="button" id="recognize" value="Recognize">
 <div id="translation"></div>
