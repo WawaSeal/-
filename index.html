@@ -1,31 +1,113 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>HTML5 Speech Translator</title>
+  <title>リアルタイム翻訳機</title>
   <style>
+    #video {
+      width: 640px;
+      height: 480px;
+      background-color: green;
+    }
     #subtitle {
       position: absolute;
-      bottom: 10%;
-      left: 10%;
-      right: 10%;
-      font-size: 3em;
-      color: white;
+      bottom: 50px;
+      left: 0;
+      right: 0;
       text-align: center;
-      background-color: green;
-      resize: both;
+      font-size: 32px;
+      color: white;
     }
     #color-picker {
       position: absolute;
-      top: 10%;
-      right: 10%;
-      width: 50px;
-      height: 50px;
+      top: 10px;
+      left: 10px;
+    }
+    #color-label {
+      display: inline-block;
+      width: 100px;
     }
   </style>
 </head>
 <body>
+  <div id="video"></div>
   <div id="subtitle"></div>
-  <input id="color-picker" type="color" value="#00ff00">
-  <script src="script.js"></script>
+  <div id="color-picker">
+    <label id="color-label" for="bg-color">背景色</label>
+    <input type="color" id="bg-color" value="#00ff00">
+    <label id="color-label" for="text-color">字幕色</label>
+    <input type="color" id="text-color" value="#ffffff">
+  </div>
+  <script>
+    // マイクの使用許可を求める
+    navigator.mediaDevices.getUserMedia({audio: true})
+      .then(stream => {
+        // 音声認識オブジェクトを作成
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = "ja-JP"; // 日本語に設定
+        recognition.continuous = true; // 連続的に認識する
+        recognition.interimResults = true; // 中間結果を返す
+
+        // 音声認識開始
+        recognition.start();
+
+        // 音声認識結果を取得
+        recognition.onresult = event => {
+          // 最新の結果を取得
+          const results = event.results[event.results.length - 1];
+          // 確定した結果かどうか
+          const isFinal = results.isFinal;
+
+          // 結果のテキストを取得
+          const text = results[0].transcript;
+
+          // 翻訳APIにリクエストを送る
+          const url = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=en";
+          const headers = {
+            "Ocp-Apim-Subscription-Key": "<YOUR_SUBSCRIPTION_KEY>",
+            "Ocp-Apim-Subscription-Region": "<YOUR_SUBSCRIPTION_REGION>",
+            "Content-Type": "application/json"
+          };
+          const body = JSON.stringify([{text}]);
+
+          fetch(url, {method: "POST", headers, body})
+            .then(response => response.json())
+            .then(data => {
+              // 翻訳結果を取得
+              const translation = data[0].translations[0].text;
+
+              // 字幕に表示
+              const subtitle = document.getElementById("subtitle");
+              subtitle.textContent = translation;
+
+              // 確定したら字幕を消す
+              if (isFinal) {
+                setTimeout(() => {
+                  subtitle.textContent = "";
+                }, 3000);
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        };
+
+        // 背景色と字幕色を変更するイベントリスナーを登録
+        const video = document.getElementById("video");
+        const bgColor = document.getElementById("bg-color");
+        const textColor = document.getElementById("text-color");
+
+        bgColor.addEventListener("change", event => {
+          video.style.backgroundColor = event.target.value;
+        });
+
+        textColor.addEventListener("change", event => {
+          subtitle.style.color = event.target.value;
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  </script>
 </body>
 </html>
