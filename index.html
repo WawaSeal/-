@@ -13,6 +13,21 @@ function initGoogleTranslate() {
   // Google Translate APIを作成します。
   var googleTranslate = new google.translate.Translate();
 
+  // 音声を認識します。
+  function recognize() {
+    // 音声認識エンジンを作成します。
+    var recognizer = new SpeechRecognition();
+
+    // 音声認識を開始します。
+    recognizer.start();
+
+    // 音声認識が終了したら、翻訳します。
+    recognizer.onend = function() {
+      var text = recognizer.result.transcript;
+      translate(text);
+    };
+  }
+
   // テキストを翻訳します。
   function translate(text) {
     // 翻訳結果を取得します。
@@ -22,37 +37,13 @@ function initGoogleTranslate() {
     $("#translation").html(translation);
   }
 
-  // テキスト入力フィールドにテキストが入力されたら、翻訳します。
-  $("#input").on("input", function() {
-    translate($(this).val());
-  });
-
-  // 背景色と翻訳結果の英語字幕の色を変更する
-  $("#background").on("click", function() {
-    var color = $(this).val();
-    $("#translation").css("background-color", color);
-  });
-
-  $("#translation-color").on("click", function() {
-    var color = $(this).val();
-    $("#translation").css("color", color);
-  });
+  // 音声認識ボタンをクリックしたら、音声を認識します。
+  $("#recognize").on("click", recognize);
 }
 </script>
-</head>
+<head>
 <body>
-<input type="text" id="input">
-<button id="translate">Translate</button>
+<input type="button" id="recognize" value="Recognize">
 <div id="translation"></div>
-<div id="background">
-  <input type="radio" name="background" value="red">Red
-  <input type="radio" name="background" value="blue">Blue
-  <input type="radio" name="background" value="green">Green
-</div>
-<div id="translation-color">
-  <input type="radio" name="translation-color" value="black">Black
-  <input type="radio" name="translation-color" value="white">White
-  <input type="radio" name="translation-color" value="gray">Gray
-</div>
 </body>
 </html>
