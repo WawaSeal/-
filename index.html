@@ -2,10 +2,6 @@
 <html>
 <head>
 <title>Real-time translator</title>
-</head>
-<body>
-<input type="button" id="record" value="翻訳開始">
-<input type="text" id="output" disabled>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(function() {
@@ -19,18 +15,33 @@ $(function() {
 
     // テキストを翻訳します。
     var translator = new googleTranslate();
-    var translation = translator.translate(text, 'ja');
+    var translation = translator.translate(text, 'en');
 
     // 翻訳されたテキストを表示します。
-    $("#output").val(translation);
+    $("#output").text(translation);
   };
 
   // 録音ボタンをクリックしたときに音声認識を開始します。
   $("#record").click(function() {
     r.start();
   });
+
+  // 停止ボタンをクリックしたときに音声認識を停止します。
+  $("#stop").click(function() {
+    r.stop();
+  });
+
+  // 字幕の色を変更します。
+  $("#color").change(function() {
+    $("#output").css("color", $("#color").val());
+  });
 });
 </script>
+</head>
+<body>
+<input type="button" id="record" value="Record">
+<input type="button" id="stop" value="Stop">
+<input type="color" id="color" value="black">
+<div id="output"></div>
 </body>
 </html>
-
