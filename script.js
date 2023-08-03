@@ -24,33 +24,16 @@ recognition.onresult = function(event) {
   // 最新の認識結果を取得
   const result = event.results[event.results.length - 1][0].transcript;
 
-  // Bing Translator APIにリクエストするURLを作成
-  // サブスクリプションキーとリージョンは自分で取得してください
+  // DeepL APIにリクエストするURLを作成
+  // サブスクリプションキーは自分で取得してください
   const subscriptionKey = "YOUR_SUBSCRIPTION_KEY";
-  const region = "YOUR_REGION";
-  const endpoint = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from=ja&to=en";
-  const url = new URL(endpoint);
-
-  // リクエストするデータを作成
-  const data = [{
-    text: result
-  }];
-
-  // リクエストするオプションを作成
-  const options = {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-      "Ocp-Apim-Subscription-Key": subscriptionKey,
-      "Ocp-Apim-Subscription-Region": region
-    }
-  };
+  const endpoint = "https://api.deepl.com/v2/translate?auth_key=" + subscriptionKey + "&source_lang=JA&target_lang=EN-US&text=";
+  const url = new URL(endpoint + encodeURIComponent(result));
 
   // リクエストを送信し、レスポンスを受け取ったら字幕に表示する関数を登録
-  fetch(url, options).then(response => response.json()).then(data => {
+  fetch(url).then(response => response.json()).then(data => {
     // 翻訳結果を取得
-    const translation = data[0].translations[0].text;
+    const translation = data.translations[0].text;
 
     // 字幕に表示
     subtitle.textContent = translation;
