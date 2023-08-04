@@ -90,10 +90,10 @@ function translateText(text) {
 }
 
 function inputChange(event){
-    
+    translate(base_text,result_text);
 }
 
-let textarea = document.getElementById('textarea');
+let textarea = document.getElementById('base_text');
 textarea.addEventListener('input', inputChange);
 </script>
 </head>
