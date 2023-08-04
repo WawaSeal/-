@@ -67,6 +67,30 @@
             recognition.start();
         }
     </script>
+<script>
+function translate(textarea1, textarea2) {
+  // テキストを取得する
+  var text = textarea1.value;
+
+  // 翻訳する
+  var translatedText = translateText(text);
+
+  // テキストをtextarea2に設定する
+  textarea2.value = translatedText;
+}
+
+// 翻訳する
+function translateText(text) {
+  // 翻訳APIを呼び出す
+  var response = translateAPI.translate(text, fromLanguage, toLanguage);
+
+  // 翻訳されたテキストを取得する
+  var translatedText = response.translatedText;
+
+  // 翻訳されたテキストを返す
+  return translatedText;
+}
+</script>
 </head>
 
 <body>
