@@ -1,100 +1,32 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-<meta charset="SJIS">
-<title>リアルタイム翻訳機</title>
-</head>
-
-
-
-<body>
-
-
-<canvas id="clockid"></canvas>
-<form name="fontForm" id="id_fontForm" action="">
-背景色:<select name="backcolor" size="1">
-<option value="255,255,255">白</option>
-<option value="0,255,0">緑</option>
-<option value="0,0,255">青</option>
-<option value="0,0,0">黒</option>
-</select><br>
-書体:<select name="fontstyle" size="1">
-<option value="">なし</option>
-<option value="bold">太字</option>
-<option value="oblique">斜体</option>
-<option value="oblique bold">斜体+太字</option>
-</select><br>
-フォントサイズ:<input type="text" name="fontsize" value="40" size="3" maxlength="3"><br>
-フォント:<input type="text" name="fonttype" value="Arial" size="20"><br>
-フォントカラー  <input type="color" name="colortype" value="rgb(0,0,0)"><br>
-縁取りカラー  <input type="color" name="strcolor" value="rgb(0,0,0)">
-</form><br>
-フォントはPCにインストールされているフォント名を入力してもらえればそのまま使えるはずです<br>
+<title>Speech Recognition</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://www.google.com/jsapi"></script>
 <script>
-// ページ読み込み時に init関数を実行
-window.onload = function() {
-init();
-};
- 
-// clock関数を１秒周期で繰り返す
-function init(){
-clock();
-setInterval('clock();',1000);
-}
-
-// clock関数 start
-function clock(){
-var now = new Date();
- 
-var canvas = document.getElementById("clockid");
-var ctx = canvas.getContext('2d');
-ctx.save();
-
-var txt = "Test";
-
-// 各種設定
-canvas.width = 960;
-canvas.height = 480;
-var w      = canvas.width;
-var h      = canvas.height;
-
-//セレクトボックス内の背景色を取得する
-var backcolor = document.forms.id_fontForm.backcolor.value;
-//セレクトボックス内のフォントスタイルを取得する
-var fontstyle = document.forms.id_fontForm.fontstyle.value;
-//テキストボックス内のフォントサイズを取得する
-var fontsize = document.forms.id_fontForm.fontsize.value;
-//テキストボックス内のフォントを取得する
-var fonttype = document.forms.id_fontForm.fonttype.value;
-//テキストボックス内の文字カラーを取得する
-var colortype = document.forms.id_fontForm.colortype.value;
-//テキストボックス内の縁取りカラーを取得する
-var strcolor = document.forms.id_fontForm.strcolor.value;
-
-//Canvas初期化
-ctx.clearRect(0, 0, w, h);
-
-//文字フォントを指定する
-ctx.font = fontstyle + " " + fontsize + "px " + fonttype;
-
-//背景色を指定する
-ctx.fillStyle = 'rgb(' + backcolor + ')';
-
-//背景を塗りつぶす
-ctx.fillRect(0,0,w,h);
-
-//時計の文字色を設定する
-ctx.fillStyle = colortype;
-
-//時計の文字を入れる
-ctx.fillText(txt,20,h/2);
-
-//時計の縁取り色を設定する
-ctx.strokeStyle = strcolor;
-
-//時計の縁取りを入れる
-ctx.strokeText(txt,20,h/2);
+function startRecognition() {
+  // 音声認識の開始
+  var speechRecognition = new webkitSpeechRecognition();
+  speechRecognition.continuous = true;
+  speechRecognition.interimResults = true;
+  speechRecognition.onresult = function(event) {
+    // 音声認識の結果を取得
+    var result = event.results[0].item(0);
+    // Canvasに文字を描画
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText(result, 10, 50);
+  };
+  speechRecognition.start();
 }
 </script>
+</head>
+<body>
+<input type="button" value="Start" onclick="startRecognition()">
+<canvas id="canvas" width="200" height="100"></canvas>
 </body>
 </html>
+
