@@ -66,8 +66,6 @@
             document.getElementById('status').innerHTML = "start";
             recognition.start();
         }
-    </script>
-<script>
 function translate(textarea1, textarea2) {
   // テキストを取得する
   var text = textarea1.value;
@@ -90,6 +88,13 @@ function translateText(text) {
   // 翻訳されたテキストを返す
   return translatedText;
 }
+
+function inputChange(event){
+    
+}
+
+let textarea = document.getElementById('textarea');
+textarea.addEventListener('input', inputChange);
 </script>
 </head>
 
