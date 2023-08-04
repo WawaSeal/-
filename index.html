@@ -1,108 +1,100 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>音声認識と翻訳</title>
-  </head>
-  <body>
-    <h1>音声認識と翻訳</h1>
-    <p id="subtitle"></p>
-    <button id="start-button">音声入力開始</button>
-    <input type="color" id="text-color-picker" value="#ffffff">
-    <input type="color" id="background-color-picker" value="#000000">
-    <script>
-      // 音声認識と翻訳を開始する関数
-      function startSpeechRecognition() {
-        // 音声認識の処理を実装する
-    // 音声認識APIがサポートされているか確認する
-    if (!('webkitSpeechRecognition' in window)) {
-      alert('ご利用のブラウザでは音声認識APIがサポートされていません');
-      return;
-    }
-  
-    // 音声認識オブジェクトを作成する
-    const recognition = new webkitSpeechRecognition();
-  
-    // 認識言語を設定する（英語）
-    recognition.lang = 'en-US';
-  
-    // 連続した結果を取得する（falseに設定すると、1回のみの認識結果を返す）
-    recognition.continuous = true;
-  
-    // 認識中に中断された場合に処理を行う
-    recognition.onend = function() {
-      console.log('音声認識が停止しました');
-    };
-  
-    // 認識された音声データを取得する
-    recognition.onresult = function(event) {
-      // 認識結果を取得する
-      const result = event.results[event.results.length - 1];
-  
-      // 認識されたテキストを取得する
-      const text = result[0].transcript;
-  
-      // 翻訳の処理を実装する
-      
-  // Microsoft Translator APIのエンドポイントURL
-  const url = 'https://api.cognitive.microsofttranslator.com/translate';
+<html lang="ja">
+<head>
+<meta charset="SJIS">
+<title>デジタルクロック</title>
+</head>
 
-  // APIキー
-  const apiKey = 'd4badfdb-6aa7-4465-86f4-619fa3dab117';
 
-  // 翻訳する言語のコード（英語）
-  const targetLanguage = 'en';
 
-  // リクエストヘッダを作成する
-  const headers = {
-    'Content-Type': 'application/json',
-    'Ocp-Apim-Subscription-Key': apiKey,
-  };
+<body>
 
-  // リクエストボディを作成する
-  const body = JSON.stringify([
-    {
-      text: text,
-    }
 
-  // リクエストを送信する
-  fetch(`${url}?api-version=3.0&to=${targetLanguage}`, {
-    method: 'POST',
-    headers: headers,
-    body: body,
-  })
-    .then(response => response.json())
-    .then(data => {
-      // 翻訳結果を取得する
-      const translatedText = data[0].translations[0].text;
-
-      // 翻訳結果を字幕として表示する
-      document.getElementById('subtitle').textContent = translatedText;
-    })
-    .catch(error => {
-      console.error(error);
-    });
+<canvas id="clockid"></canvas>
+<form name="fontForm" id="id_fontForm" action="">
+背景色:<select name="backcolor" size="1">
+<option value="255,255,255">白</option>
+<option value="0,255,0">緑</option>
+<option value="0,0,255">青</option>
+<option value="0,0,0">黒</option>
+</select><br>
+書体:<select name="fontstyle" size="1">
+<option value="">なし</option>
+<option value="bold">太字</option>
+<option value="oblique">斜体</option>
+<option value="oblique bold">斜体+太字</option>
+</select><br>
+フォントサイズ:<input type="text" name="fontsize" value="40" size="3" maxlength="3"><br>
+フォント:<input type="text" name="fonttype" value="Arial" size="20"><br>
+フォントカラー  <input type="color" name="colortype" value="rgb(0,0,0)"><br>
+縁取りカラー  <input type="color" name="strcolor" value="rgb(0,0,0)">
+</form><br>
+フォントはPCにインストールされているフォント名を入力してもらえればそのまま使えるはずです<br>
+<script>
+// ページ読み込み時に init関数を実行
+window.onload = function() {
+init();
+};
+ 
+// clock関数を１秒周期で繰り返す
+function init(){
+clock();
+setInterval('clock();',1000);
 }
 
-      
-      // 翻訳結果を字幕として表示する
-      document.getElementById('subtitle').textContent = text;
-    };
-  
-    // 音声認識を開始する
-    recognition.start();
-  }
-      }
+// clock関数 start
+function clock(){
+var now = new Date();
+ 
+var canvas = document.getElementById("clockid");
+var ctx = canvas.getContext('2d');
+ctx.save();
 
-      // ボタンがクリックされたときに音声認識と翻訳を開始する
-      document.getElementById("start-button").addEventListener("click", startSpeechRecognition);
+var txt = now.toLocaleTimeString("ja-JP");
 
-      // カラーピッカーで選択された色を使って、字幕のスタイルを変更する
-      document.getElementById("text-color-picker").addEventListener("change", function() {
-        document.getElementById("subtitle").style.color = this.value;
-      });
-      document.getElementById("background-color-picker").addEventListener("change", function() {
-        document.getElementById("subtitle").style.backgroundColor = this.value;
-      });
-    </script>
-  </body>
+// 各種設定
+canvas.width = 960;
+canvas.height = 480;
+var w      = canvas.width;
+var h      = canvas.height;
+
+//セレクトボックス内の背景色を取得する
+var backcolor = document.forms.id_fontForm.backcolor.value;
+//セレクトボックス内のフォントスタイルを取得する
+var fontstyle = document.forms.id_fontForm.fontstyle.value;
+//テキストボックス内のフォントサイズを取得する
+var fontsize = document.forms.id_fontForm.fontsize.value;
+//テキストボックス内のフォントを取得する
+var fonttype = document.forms.id_fontForm.fonttype.value;
+//テキストボックス内の文字カラーを取得する
+var colortype = document.forms.id_fontForm.colortype.value;
+//テキストボックス内の縁取りカラーを取得する
+var strcolor = document.forms.id_fontForm.strcolor.value;
+
+//Canvas初期化
+ctx.clearRect(0, 0, w, h);
+
+//文字フォントを指定する
+ctx.font = fontstyle + " " + fontsize + "px " + fonttype;
+
+//背景色を指定する
+ctx.fillStyle = 'rgb(' + backcolor + ')';
+
+//背景を塗りつぶす
+ctx.fillRect(0,0,w,h);
+
+//時計の文字色を設定する
+ctx.fillStyle = colortype;
+
+//時計の文字を入れる
+ctx.fillText(txt,20,h/2);
+
+//時計の縁取り色を設定する
+ctx.strokeStyle = strcolor;
+
+//時計の縁取りを入れる
+ctx.strokeText(txt,20,h/2);
+}
+</script>
+</body>
 </html>
