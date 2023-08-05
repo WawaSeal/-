@@ -6,21 +6,19 @@
     <meta name="robots" content="noindex,nofollow">
     <title>リアルタイム翻訳機</title>
     <style type="text/css">
-    textarea {
-      font-size: 20px;
-      background-color: 0,255,0;
-      font-family: 'Hiragino Kaku Gothic ProN','メイリオ', sans-serif;
-      
-      font-color: white;
-    }
-    input {
-      background-color: white;
-      color: black;
-      font-size:20px;
-	  font-color:255,255,255;
-      font-family: 'Hiragino Kaku Gothic ProN','メイリオ', sans-serif;
-      border-radius: 10px;
-    }
+    #base_text{
+    border:1px dashed gray;   /* 枠線 */
+    background-color:#00ff00; /* 背景色 */
+	}
+    #result_text{
+    border:1px dashed gray;   /* 枠線 */
+    background-color:#00ff00; /* 背景色 */
+	}	
+    #status{
+    border:1px strong black; /* 枠線 */
+    background-color:#ccccff; /* 背景色 */
+	}
+
     </style>
     <script>
         var flag_speech = 0;//flag
@@ -116,6 +114,7 @@ function deeplTranslate() {
   <br><br><br><br>
     <textarea id="base_text" cols="50" rows="5">
     </textarea>
+	<br>
 	<textarea id="result_text" cols="50" rows="5">
     </textarea>
     <br>
