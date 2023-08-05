@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex,nofollow">
-    <title>リアルタイム翻訳機V1</title>
+    <title>リアルタイム翻訳機</title>
     <style type="text/css">
     textarea {
       font-size: 20px;
@@ -35,7 +35,7 @@
                 document.getElementById('status').innerHTML = "認識中";
             };
             recognition.onnomatch = function() {
-y                document.getElementById('status').innerHTML = "開始ボタンをもう一度押してね";
+                document.getElementById('status').innerHTML = "開始ボタンをもう一度推してね";
             };
             recognition.onerror = function() {
                 document.getElementById('status').innerHTML = "エラー";
@@ -52,9 +52,7 @@ y                document.getElementById('status').innerHTML = "開始ボタン�
                 for (var i = event.resultIndex; i < results.length; i++) {
                     if (results[i].isFinal)
                     {
-
-			document.getElementById('base_text').innerHTML = results[i][0].transcript;
-			document.getElementById('result_text').innerHTML = translate(results[i][0].transcript);
+                        document.getElementById('base_text').innerHTML = results[i][0].transcript;
                         vr_function();
                     }
                     else
@@ -68,22 +66,31 @@ y                document.getElementById('status').innerHTML = "開始ボタン�
             document.getElementById('status').innerHTML = "start";
             recognition.start();
         }
-	    
-// 日本語を英語に翻訳する
-function translate(text) {
+function translate(textarea1, textarea2) {
+  // テキストを取得する
+  var text = textarea1.value;
+
+  // 翻訳する
+  var translatedText = translateText(text);
+
+  // テキストをtextarea2に設定する
+  textarea2.value = translatedText;
+}
+
+// 翻訳する
+function translateText(text) {
   // 翻訳APIを呼び出す
   var response = translateAPI.translate(text, "ja", "en");
 
   // 翻訳されたテキストを取得する
   var translatedText = response.translatedText;
 
-  // 翻訳されたテキストをtextarea2に設定する
-  document.getElementById('result_text').value = translatedText;
+  // 翻訳されたテキストを返す
+  return translatedText;
 }
 
-// 入力されたテキストを翻訳する
 function inputChange(event){
-  translate(base_text.value);
+    translate(base_text,result_text);
 }
 
 let textarea = document.getElementById('base_text');
@@ -101,9 +108,8 @@ textarea.addEventListener('input', inputChange);
     <textarea id="status" cols="50" rows="1">
     </textarea>
     <br>
-    <input type="button" onClick="vr_function()" value="認識スタート">
+    <input type="button" onClick="vr_function();" value="認識スタート">
 <br><br>
 </body>
 
 </html>
-
