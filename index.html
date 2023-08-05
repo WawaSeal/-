@@ -66,31 +66,22 @@
             document.getElementById('status').innerHTML = "start";
             recognition.start();
         }
-function translate(textarea1, textarea2) {
-  // テキストを取得する
-  var text = textarea1.value;
-
-  // 翻訳する
-  var translatedText = translateText(text);
-
-  // テキストをtextarea2に設定する
-  textarea2.value = translatedText;
-}
-
-// 翻訳する
-function translateText(text) {
+	    
+// 日本語を英語に翻訳する
+function translate(text) {
   // 翻訳APIを呼び出す
   var response = translateAPI.translate(text, "ja", "en");
 
   // 翻訳されたテキストを取得する
   var translatedText = response.translatedText;
 
-  // 翻訳されたテキストを返す
-  return translatedText;
+  // 翻訳されたテキストをtextarea2に設定する
+  document.getElementById('result_text').value = translatedText;
 }
 
+// 入力されたテキストを翻訳する
 function inputChange(event){
-    translate(base_text,result_text);
+  translate(base_text.value);
 }
 
 let textarea = document.getElementById('base_text');
@@ -108,7 +99,7 @@ textarea.addEventListener('input', inputChange);
     <textarea id="status" cols="50" rows="1">
     </textarea>
     <br>
-    <input type="button" onClick="vr_function();" value="認識スタート">
+    <input type="button" onClick="inputChange();" value="認識スタート">
 <br><br>
 </body>
 
