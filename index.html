@@ -118,19 +118,40 @@ function deeplTranslate() {
 	window.addEventListener('DOMContentLoaded',function(){
  		bgc = document.getElementById('bgc');
 		txc = document.getElementById('txc');
+		font = document.getElementById('font');
+		weight = document.getElementById('weight');
+		style = document.getElementById('style');
   		base_text = document.getElementById('base_text');
 		result_text = document.getElementById('result_text');
-  		bgc.addEventListener('change',bgcGet,false);
-		txc.addEventListener('change',txcGet,false);
+  		bgc.addEventListener('change',bgcChange,false);
+		txc.addEventListener('change',txcChange,false);
+		font.addEventListener('change',fontChange,false)
+		weight.addEventListener('change',weightChange,false)
+		style.addEventListener('change',styleChange,false)
 		
- 	 function bgcGet(){
+ 	 function bgcChange(){
     		base_text.style.backgroundColor = this.value;
 		result_text.style.backgroundColor = this.value;
   		}
 
-	function txcGet(){
+	function txcChange(){
     		base_text.style.color = this.value;
 		result_text.style.color = this.value;
+  		}
+
+	function fontChange(){
+    		base_text.style.fontFamily = this.value;
+		result_text.style.fontFamily = this.value;
+  		}
+
+	function weightChange(){
+    		base_text.style.fontWeight = this.value;
+		result_text.style.fontWeight = this.value;
+  		}
+
+	function styleChange(){
+    		base_text.style.fontFamily = this.value;
+		result_text.style.fontFamily = this.value;
   		}
 	});
 
@@ -148,9 +169,12 @@ function deeplTranslate() {
     <br>
     <textarea id="status" cols="50" rows="1">
     </textarea>
+    <textarea id="status2" cols="50" rows="1">
+    </textarea>
     <br>
-   <label><input type="color" id="bgc">背景色</label>
-   <label><input type="color" id="txc">文字色</label><br>
+   <label>背景色：<input type="color" id="bgc"></label>
+   <label>文字色：<input type="color" id="txc"></label><br><br>
+   <label>フォント：<input type="text" id="font" value="メイリオ"></label><br>	
     <br>
     <br>
     <input type="button" onClick="vr_function();" value="認識スタート">
