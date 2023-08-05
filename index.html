@@ -53,8 +53,7 @@
                     if (results[i].isFinal)
                     {
                         document.getElementById('base_text').innerHTML = results[i][0].transcript;
-			var text2 = results[i][0].transcript;
-			translate(base_text,result_text);
+			deeplTranslate();
                         vr_function();
                     }
                     else
@@ -68,35 +67,47 @@
             document.getElementById('status').innerHTML = "start";
             recognition.start();
         }
-function translate(textarea1, textarea2) {
-  // テキストを取得する
-  var text = textarea1.value;
 
-  // 翻訳する
-  var translatedText = translateText(text);
+const API_KEY = '98e2d31f-50b8-9ded-1052-f31c8dfd4d9c:fx' ;
+const API_URL = 'https://api-free.deepl.com/v2/translate';
 
-  // テキストをtextarea2に設定する
-  textarea2.value = translatedText;
-}
+function deeplTranslate() {
+    let deeplInput=document.getElementById("base_text").value;
+    let isJapanese=false;
+    let sourceLang="";
 
-// 翻訳する
-function translateText(text) {
-  // 翻訳APIを呼び出す
-  var response = translateAPI.translate(text, "ja", "en");
+    for(var i=0; i < deeplInput.length; i++){//言語判別
+        if(deeplInput.charCodeAt(i) >= 256) {
+        isJapanese = true;
+        break;
+        }
+    }
+    switch (isJapanese){
+        case true:
+         sourceLang='&source_lang=JA&target_lang=EN';
+        break;
+        case false:
+         sourceLang='&source_lang=EN&target_lang=JA';
+        break;
+        default:
+         alert("言語の判別に失敗しました");
+    }
+  let content = encodeURI('auth_key=' + API_KEY + '&text=' + deeplInput + sourceLang);
+  let url = API_URL + '?' + content;
 
-  // 翻訳されたテキストを取得する
-  var translatedText = response.translatedText;
-
-  // 翻訳されたテキストを返す
-  return translatedText;
-}
-
-function inputChange(event){
-    translate(base_text,result_text);
-}
-
-let textarea = document.getElementById('base_text');
-textarea.addEventListener('input', inputChange);
+  fetch(url)
+    .then(function(response) {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error("Could not reach the API: " + response.statusText);
+        }
+    }).then(function(data) {
+        document.getElementById("result_text").value = data["translations"][0]["text"];
+    }).catch(function(error) {
+        alert("翻訳失敗");
+    });
+};
 </script>
 </head>
 
