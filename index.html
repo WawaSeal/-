@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex,nofollow">
-    <title>リアルタイム翻訳機V1</title>
+    <title>リアルタイム翻訳機V1.0</title>
     <style type="text/css">
     textarea {
       font-size: 20px;
@@ -53,7 +53,7 @@
                     if (results[i].isFinal)
                     {
                         document.getElementById('base_text').innerHTML = results[i][0].transcript;
-			document.getElementById('result_text').innerHTML = results[i][0].transcript;
+			document.getElementById('result_text').innerHTML = translateText(results[i][0].transcript);
                         vr_function();
                     }
                     else
