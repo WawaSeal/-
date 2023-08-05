@@ -4,15 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex,nofollow">
-    <title>リアルタイム翻訳機</title>
+    <title>リアルタイム翻訳機1.0</title>
     <style type="text/css">
     #base_text{
     border:1px dashed gray;   /* 枠線 */
     background-color:#00ff00; /* 背景色 */
+    width: 800px;  /* 横幅 */
+    height: 200px; /* 高さ */
+    font-size:48px;　/* フォントサイズ */
 	}
     #result_text{
     border:1px dashed gray;   /* 枠線 */
     background-color:#00ff00; /* 背景色 */
+    width: 800px;  /* 横幅 */
+    height: 200px; /* 高さ */
+    font-size:48px; /* フォントサイズ */
 	}	
     #status{
     border:1px strong black; /* 枠線 */
@@ -107,6 +113,28 @@ function deeplTranslate() {
         alert("翻訳失敗");
     });
 };
+
+//色変更
+	window.addEventListener('DOMContentLoaded',function(){
+ 		bgc = document.getElementById('bgc');
+		txc = document.getElementById('txc');
+  		base_text = document.getElementById('base_text');
+		result_text = document.getElementById('result_text');
+  		bgc.addEventListener('change',bgcGet,false);
+		txc.addEventListener('change',txcGet,false);
+		
+ 	 function bgcGet(){
+    		base_text.style.backgroundColor = this.value;
+		result_text.style.backgroundColor = this.value;
+  		}
+
+	function txcGet(){
+    		base_text.style.color = this.value;
+		result_text.style.color = this.value;
+  		}
+	});
+
+
 </script>
 </head>
 
@@ -120,6 +148,10 @@ function deeplTranslate() {
     <br>
     <textarea id="status" cols="50" rows="1">
     </textarea>
+    <br>
+   <label><input type="color" id="bgc">背景色</label>
+   <label><input type="color" id="txc">文字色</label><br>
+    <br>
     <br>
     <input type="button" onClick="vr_function();" value="認識スタート">
 <br><br>
