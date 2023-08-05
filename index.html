@@ -35,7 +35,7 @@
                 document.getElementById('status').innerHTML = "認識中";
             };
             recognition.onnomatch = function() {
-                document.getElementById('status').innerHTML = "開始ボタンをもう一度推してね";
+y                document.getElementById('status').innerHTML = "開始ボタンをもう一度押してね";
             };
             recognition.onerror = function() {
                 document.getElementById('status').innerHTML = "エラー";
@@ -52,7 +52,9 @@
                 for (var i = event.resultIndex; i < results.length; i++) {
                     if (results[i].isFinal)
                     {
-                        document.getElementById('base_text').innerHTML = results[i][0].transcript;
+
+			document.getElementById('base_text').innerHTML = results[i][0].transcript;
+			document.getElementById('result_text').innerHTML = translate(results[i][0].transcript);
                         vr_function();
                     }
                     else
@@ -99,7 +101,7 @@ textarea.addEventListener('input', inputChange);
     <textarea id="status" cols="50" rows="1">
     </textarea>
     <br>
-    <input type="button" onClick="inputChange();" value="認識スタート">
+    <input type="button" onClick="vr_function();" value="認識スタート">
 <br><br>
 </body>
 
