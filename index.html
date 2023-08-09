@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex,nofollow">
-    <title>リアルタイム翻訳機F</title>
+    <title>リアルタイム翻訳機</title>
     <style type="text/css">
     #base_text{
     border:1px dashed gray;   /* 枠線 */
@@ -157,8 +157,6 @@ function deeplTranslate() {
 
 
 </script>
-
-  <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
@@ -177,37 +175,8 @@ function deeplTranslate() {
    <label>背景色：<input type="color" id="bgc"></label>
    <label>文字色：<input type="color" id="txc"></label><br><br>
    <label>フォント：<input type="text" id="font" value="メイリオ"></label><br>	
-	
     <br>
     <br>
-	<header class="setting">
-	      <div class="right">
-            <p><input type="text" id="search" placeholder="Search fonts"></p>
-            <p><input type="text" id="text" placeholder="Text"></p>
-            <p><a href="#" id="moreBtn" class="more-btn"></a></p>
-        </div>
-        <menu class="menu" id="moreSetting">
-            <div class="bg-color color-selector">
-                <p>Background color <input type="color" id="bgColor" value="#ffffff"></p>
-                <p class="red"><input type="range" id="bgRedRange" class="color-slider" min="0" max="255" value="255"><input type="number" id="bgRed" class="color-number" min="0" max="255" value="255"></p>
-                <p class="green"><input type="range" id="bgGreenRange" class="color-slider" min="0" max="255" value="255"><input type="number" id="bgGreen" class="color-number" min="0" max="255" value="255"></p>
-                <p class="blue"><input type="range" id="bgBlueRange" class="color-slider" min="0" max="255" value="255"><input type="number" id="bgBlue" class="color-number" min="0" max="255" value="255"></p>
-            </div>
-            <div class="font-color color-selector">
-                <p>Font color <input type="color" id="fontColor" value="#000000"></p>
-                <p class="red"><input type="range" id="fontRedRange" class="color-slider" min="0" max="255" value="0"><input type="number" id="fontRed" class="color-number" min="0" max="255" value="0"></p>
-                <p class="green"><input type="range" id="fontGreenRange" class="color-slider" min="0" max="255" value="0"><input type="number" id="fontGreen" class="color-number" min="0" max="255" value="0"></p>
-                <p class="blue"><input type="range" id="fontBlueRange" class="color-slider" min="0" max="255" value="0"><input type="number" id="fontBlue" class="color-number" min="0" max="255" value="0"></p>
-            </div>
-            <div class="size">
-                <p>Font size <input type="number" id="fontSize" value="30" style="width: 3em;">px</p>
-            </div>
-        </menu>
-    </header>
-	<div class="container" id="container">
-        <div id="fontlist" class="fontlist"></div>
-    </div>
-    <script src="index.js"></script>
     <input type="button" onClick="vr_function();" value="認識スタート">
 <br><br>
 </body>
