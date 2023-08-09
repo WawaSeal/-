@@ -145,13 +145,25 @@ function deeplTranslate() {
   		}
 
 	function weightChange(){
-    		base_text.style.fontWeight = this.value;
-		result_text.style.fontWeight = this.value;
-  		}
+		if(weight.checked==true){
+		base_text.style.fontWeight = "Bold";
+		result_text.style.fontWeight = "bold";
+		}
+		else{
+		base_text.style.fontWeight = "normal";
+		result_text.style.fontWeight = "normal";
+		}
+	}
 
 	function styleChange(){
-    		base_text.style.fontFamily = this.value;
-		result_text.style.fontFamily = this.value;
+		if(style.checked==true){		
+		base_text.style.fontStyle = "italic";
+		result_text.style.fontStyle = "italic";
+		}
+		else{
+				base_text.style.fontStyle = "normal";
+		result_text.style.fontStyle = "normal";
+		}
   		}
 	});
 
@@ -175,6 +187,9 @@ function deeplTranslate() {
    <label>背景色：<input type="color" id="bgc"></label>
    <label>文字色：<input type="color" id="txc"></label><br><br>
    <label>フォント：<input type="text" id="font" value="メイリオ"></label><br>	
+   <label>太字：<input type="checkbox" id="weight" value=""><br>
+   <label>斜体：<input type="checkbox" id="style" value=""><br>
+   </label><br>	
     <br>
     <br>
     <input type="button" onClick="vr_function();" value="認識スタート">
