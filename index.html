@@ -121,6 +121,8 @@ function deeplTranslate() {
 		font = document.getElementById('font');
 		weight = document.getElementById('weight');
 		style = document.getElementById('style');
+		border = document.getElementById('border');
+		bc = document.getElementById('bordercolor');
   		base_text = document.getElementById('base_text');
 		result_text = document.getElementById('result_text');
   		bgc.addEventListener('change',bgcChange,false);
@@ -128,7 +130,7 @@ function deeplTranslate() {
 		font.addEventListener('change',fontChange,false)
 		weight.addEventListener('change',weightChange,false)
 		style.addEventListener('change',styleChange,false)
-		
+		border.addEventListener('change',borderChange,false)
  	 function bgcChange(){
     		base_text.style.backgroundColor = this.value;
 		result_text.style.backgroundColor = this.value;
@@ -165,6 +167,15 @@ function deeplTranslate() {
 		result_text.style.fontStyle = "normal";
 		}
   		}
+		  
+	function borderChange(){
+		if(border.checked==true){		
+		result_text.style.textShadow = "1px 1px 0 " + bc.value + ",-1px 1px 0" + bc.value + ",1px -1px 0 " +     bc.value + ",-1px -1px 0" + bc.value;
+		}
+		else{
+		result_text.style.textShadow = "";
+		}
+  		}
 	});
 
 
@@ -189,6 +200,8 @@ function deeplTranslate() {
    <label>フォント：<input type="text" id="font" value="メイリオ"></label><br>	
    <label>太字：<input type="checkbox" id="weight" value=""><br>
    <label>斜体：<input type="checkbox" id="style" value=""><br>
+   <label>縁取り：<input type="checkbox" id="border" value=""><br>
+   <label>縁取り色：<input type="color" id="bordercolor"></label><br><br>
    </label><br>	
     <br>
     <br>
