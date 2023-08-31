@@ -10,14 +10,14 @@
     border:1px dashed gray;   /* 枠線 */
     background-color:#00ff00; /* 背景色 */
     width: 100%;  /* 横幅 */
-    height: 10%; /* 高さ */
+    height: 25%; /* 高さ */
     font-size:48px;　/* フォントサイズ */
 	}
     #result_text{
     border:1px dashed gray;   /* 枠線 */
     background-color:#00ff00; /* 背景色 */
     width: 100%;  /* 横幅 */
-    height: 10%; /* 高さ */
+    height: 25%; /* 高さ */
     font-size:48px; /* フォントサイズ */
 	}	
     #status{
@@ -32,7 +32,10 @@
         function vr_function() {
             window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
             var recognition = new webkitSpeechRecognition();
-            recognition.lang = 'ja';
+			
+			
+			
+            recognition.lang = document.getElementById('sourceLang').value;
             recognition.interimResults = true;
             recognition.continuous = true;
 
@@ -77,42 +80,33 @@ const API_KEY = '98e2d31f-50b8-9ded-1052-f31c8dfd4d9c:fx' ;
 const API_URL = 'https://api-free.deepl.com/v2/translate';
 
 function deeplTranslate() {
-    let deeplInput=document.getElementById("base_text").value;
-    let isJapanese=false;
-    let sourceLang="";
+    let deeplInput = document.getElementById("base_text").value;
+    
+    // Get selected languages from the dropdowns
+    let selectedSourceLang = document.getElementById("sourceLang").value.toUpperCase();
+    let selectedTargetLang = document.getElementById("targetLang").value.toUpperCase();
+    
+    // Set sourceLang and targetLang based on user selection
+    let sourceLang = '&source_lang=' + selectedSourceLang;
+    let targetLang = '&target_lang=' + selectedTargetLang;
 
-    for(var i=0; i < deeplInput.length; i++){//言語判別
-        if(deeplInput.charCodeAt(i) >= 256) {
-        isJapanese = true;
-        break;
-        }
-    }
-    switch (isJapanese){
-        case true:
-         sourceLang='&source_lang=JA&target_lang=EN';
-        break;
-        case false:
-         sourceLang='&source_lang=EN&target_lang=JA';
-        break;
-        default:
-         alert("言語の判別に失敗しました");
-    }
-  let content = encodeURI('auth_key=' + API_KEY + '&text=' + deeplInput + sourceLang);
-  let url = API_URL + '?' + content;
+    let content = encodeURI('auth_key=' + '98e2d31f-50b8-9ded-1052-f31c8dfd4d9c:fx' + '&text=' + deeplInput + sourceLang + targetLang);
+    let url = 'https://api-free.deepl.com/v2/translate' + '?' + content;
 
-  fetch(url)
-    .then(function(response) {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error("Could not reach the API: " + response.statusText);
-        }
-    }).then(function(data) {
-        document.getElementById("result_text").value = data["translations"][0]["text"];
-    }).catch(function(error) {
-        alert("翻訳失敗");
-    });
+    fetch(url)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            document.getElementById("result_text").value = data["translations"][0]["text"];
+        }).catch(function(error) {
+            alert("翻訳失敗");
+        });
 };
+
 
 //色変更
 	window.addEventListener('DOMContentLoaded',function(){
@@ -149,7 +143,7 @@ function deeplTranslate() {
 	function weightChange(){
 		if(weight.checked==true){
 		base_text.style.fontWeight = "Bold";
-		result_text.style.fontWeight = "bold";
+		result_text.style.fontWeight = "Bold";
 		}
 		else{
 		base_text.style.fontWeight = "normal";
@@ -195,13 +189,31 @@ function deeplTranslate() {
     <textarea id="status2" cols="50" rows="1">
     </textarea>
     <br>
+<label for="sourceLang">翻訳元の言語:</label>
+<select id="sourceLang">
+  <option value="ja">日本語</option>
+  <option value="en">英語</option>
+  <option value="zh">中国語</option>
+  <option value="es">スペイン語</option>
+  <option value="it">イタリア語</option>
+</select>
+
+<label for="targetLang">翻訳先の言語:</label>
+<select id="targetLang">
+  <option value="en">英語</option>
+  <option value="ja">日本語</option>
+  <option value="zh">中国語</option>
+  <option value="es">スペイン語</option>
+  <option value="it">イタリア語</option>
+</select>
+<br>
    <label>背景色：<input type="color" id="bgc"></label>
    <label>文字色：<input type="color" id="txc"></label><br><br>
-   <label>フォント：<input type="text" id="font" value="メイリオ"></label><br>	
-   <label>太字：<input type="checkbox" id="weight" value=""><br>
+   <label>フォント：<input type="text" id="font" value="メイリオ"></label>
+   <label>太字：<input type="checkbox" id="weight" value="">
    <label>斜体：<input type="checkbox" id="style" value=""><br>
-   <label>縁取り：<input type="checkbox" id="border" value=""><br>
-   <label>縁取り色：<input type="color" id="bordercolor"></label><br><br>
+   <label>縁取り：<input type="checkbox" id="border" value="">
+   <label>縁取り色：<input type="color" id="bordercolor" value="#FFFFFF"></label>
    </label><br>	
     <br>
     <br>
