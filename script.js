@@ -26,7 +26,7 @@ recognition.onresult = function(event) {
 
   // DeepL APIにリクエストするURLを作成
   // サブスクリプションキーは自分で取得してください
-  const subscriptionKey = "YOUR_SUBSCRIPTION_KEY";
+  const subscriptionKey = "04a2ad04-e561-660d-f1ef-b7470570b5e7";
   const endpoint = "https://api.deepl.com/v2/translate?auth_key=" + subscriptionKey + "&source_lang=JA&target_lang=EN-US&text=";
   const url = new URL(endpoint + encodeURIComponent(result));
 
