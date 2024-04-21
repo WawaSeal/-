@@ -62,8 +62,8 @@ function deeplTranslate() {
     let sourceLang = '&source_lang=' + selectedSourceLang;
     let targetLang = '&target_lang=' + selectedTargetLang;
 
-    let content = encodeURI('auth_key=' + '98e2d31f-50b8-9ded-1052-f31c8dfd4d9c:fx' + '&text=' + deeplInput + sourceLang + targetLang);
-    let url = 'https://api-free.deepl.com/v2/translate' + '?' + content;
+    let content = encodeURI('auth_key=' + API_KEY + '&text=' + deeplInput + sourceLang + targetLang);
+    let url = API_URL + '?' + content;
 
     fetch(url)
         .then(function(response) {
