@@ -3,8 +3,8 @@
 
         function vr_function() {
             window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-            var recognition = new webkitSpeechRecognition();
-			
+            	const recognition = new SpeechRecognition;
+		recognition.continuous = true;
 			
 			
             recognition.lang = document.getElementById('sourceLang').value;
