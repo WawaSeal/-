@@ -11,18 +11,18 @@
             recognition.continuous = true;
 
             recognition.onsoundstart = function() {
-                document.getElementById('status').innerHTML = "認識中";
+                document.getElementById('status').value = "認識中";
             };
             recognition.onnomatch = function() {
-                document.getElementById('status').innerHTML = "開始ボタンをもう一度推してね";
+                document.getElementById('status').value = "開始ボタンをもう一度推してね";
             };
             recognition.onerror = function() {
-                document.getElementById('status').innerHTML = "エラー";
+                document.getElementById('status').value = "エラー";
                 if(flag_speech == 0)
                   vr_function();
             };
             recognition.onsoundend = function() {
-                document.getElementById('status').innerHTML = "停止中";
+                document.getElementById('status').value = "停止中";
                   vr_function();
             };
 
@@ -31,19 +31,19 @@
                 for (var i = event.resultIndex; i < results.length; i++) {
                     if (results[i].isFinal)
                     {
-                        document.getElementById('base_text').innerHTML = results[i][0].transcript;
+                        document.getElementById('base_text').value = results[i][0].transcript;
 			deeplTranslate();
                         vr_function();
                     }
                     else
                     {
-                        document.getElementById('base_text').innerHTML = results[i][0].transcript;
+                        document.getElementById('base_text').value = results[i][0].transcript;
                         flag_speech = 1;
                     }
                 }
             }
             flag_speech = 0;
-            document.getElementById('status').innerHTML = "start";
+            document.getElementById('status').value = "start";
             recognition.start();
         }
 
